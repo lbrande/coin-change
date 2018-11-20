@@ -1,13 +1,14 @@
-fn minimum_change_naive(denominations: &Vec<u32>, change: u32) -> u32 {
+fn minimum_change_naive(denominations: &Vec<u32>, change: u32) -> Option<u32> {
     if change == 0 {
-        return 0;
+        return Some(0);
     }
-    let mut min_coins = u32::max_value();
+    let mut min_coins = None;
     for i in 0..denominations.len() {
         if denominations[i] <= change {
-            let coins = 1 + minimum_change_naive(denominations, change - denominations[i]);
-            if coins < min_coins {
-                min_coins = coins;
+            if let Some(coins) = minimum_change_naive(denominations, change - denominations[i]) {
+                if min_coins == None || coins + 1 < min_coins.unwrap() {
+                    min_coins = Some(coins + 1);
+                }
             }
         }
     }
@@ -15,5 +16,5 @@ fn minimum_change_naive(denominations: &Vec<u32>, change: u32) -> u32 {
 }
 
 fn main() {
-    println!("{}", minimum_change_naive(&vec![10, 5, 2, 1], 17));
+    println!("{:?}", minimum_change_naive(&vec![10, 4, 2], 17));
 }
