@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 use std::collections::HashMap;
 
-fn minimum_change_naive(denoms: &Vec<u32>, change: u32) -> Option<u32> {
+fn minimum_change_naive(denoms: &[u32], change: u32) -> Option<u32> {
     if change == 0 {
         Some(0)
     } else {
@@ -35,14 +35,14 @@ fn minimum_change_greedy(denoms: &BTreeSet<u32>, mut change: u32) -> Option<u32>
 }
 
 fn minimum_change_dp(
-    denoms: &Vec<u32>,
+    denoms: &[u32],
     change: u32,
     memo: &mut HashMap<u32, Option<u32>>,
 ) -> Option<u32> {
     if change == 0 {
-        return Some(0);
+        Some(0)
     } else if let Some(&coins) = memo.get(&change) {
-        return coins;
+        coins
     } else {
         let mut min_coins = None;
         for &denom in denoms.iter() {
@@ -59,9 +59,8 @@ fn minimum_change_dp(
     }
 }
 
-fn minimum_change_dp_bottom_up(denoms: &Vec<u32>, change: u32) -> Option<u32> {
-    let mut table = Vec::with_capacity((change + 1) as usize);
-    table.push(Some(0));
+fn minimum_change_dp_bottom_up(denoms: &[u32], change: u32) -> Option<u32> {
+    let mut table = vec![Some(0)];
     for c in 1..=change {
         let mut min_coins = None;
         for &denom in denoms.iter() {
